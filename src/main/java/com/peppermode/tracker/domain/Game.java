@@ -10,7 +10,17 @@ public class Game {
     private String platform;
     private int releaseYear;
 
+
     public Game() { }
+
+    public Game(String id, String title, String genre, String platform, Integer releaseYear) {
+        this.id = id;
+        this.title = title;
+        this.genre = genre;
+        this.platform = platform;
+        this.releaseYear = releaseYear;
+    }
+
 
     public Game(String title, String genre, String platform, int releaseYear) {
         this.title = title;
