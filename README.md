@@ -29,6 +29,14 @@
 
 ---
 
+### Persistence
+- In-memory (default dev mode)
+- JSON files (`data/games.json`, `data/sessions.json`)
+  Переключение в `Main`: `useFileStorage = true|false`.
+
+
+---
+
 ## ⚙️ How to Run Locally
 
 ```bash

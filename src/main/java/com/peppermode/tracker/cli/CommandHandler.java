@@ -37,7 +37,6 @@ public class CommandHandler {
     }
 
 
-
     private void addGame() {
         System.out.print("Title: ");
         String title = sc.nextLine();
@@ -55,7 +54,8 @@ public class CommandHandler {
             if (!yearStr.isBlank()) {
                 releaseYear = Integer.parseInt(yearStr);
             }
-        } catch (NumberFormatException ignored) {}
+        } catch (NumberFormatException ignored) {
+        }
 
         String id = UUID.randomUUID().toString();
         Game g = new Game(id, title, genre, platform, releaseYear); // <-- под твой конструктор
@@ -65,18 +65,50 @@ public class CommandHandler {
     }
 
 
-
     private void addSession() {
-        System.out.print("Game id: ");
-        String gameId = sc.nextLine();
+        System.out.print("Game id / title / number: ");
+        String key = sc.nextLine().trim();
 
-        if (gameRepo.findById(gameId).isEmpty()) {
-            System.out.println("No game with id: " + gameId);
-            return;
+        // 1) пытаемся по ID
+        Optional<Game> gameOpt = gameRepo.findById(key);
+
+        // 2) по названию (без регистра)
+        if (gameOpt.isEmpty()) {
+            gameOpt = gameRepo.findAll().stream()
+                    .filter(g -> g.getTitle().equalsIgnoreCase(key))
+                    .findFirst();
         }
 
+        // 3) по номеру из текущего списка (1..N)
+        if (gameOpt.isEmpty()) {
+            try {
+                int idx = Integer.parseInt(key);
+                var all = gameRepo.findAll();
+                if (idx >= 1 && idx <= all.size()) {
+                    gameOpt = Optional.of(all.get(idx - 1));
+                }
+            } catch (NumberFormatException ignored) { }
+        }
+
+        if (gameOpt.isEmpty()) {
+            System.out.println("Game not found. Tip: use '6) List all games' and enter ID/title/number.");
+            return;
+        }
+        String gameId = gameOpt.get().getId();
+
+        // --- ввод полей сессии ---
         System.out.print("Minutes played: ");
-        int minutes = Integer.parseInt(sc.nextLine());
+        int minutes;
+        try {
+            minutes = Integer.parseInt(sc.nextLine().trim());
+            if (minutes <= 0) {
+                System.out.println("Minutes must be > 0.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Not a number. Try again.");
+            return;
+        }
 
         System.out.print("Character name (optional): ");
         String character = sc.nextLine();
@@ -86,15 +118,16 @@ public class CommandHandler {
 
         PlaySession session = new PlaySession(
                 gameId,
-                java.time.LocalDateTime.now(), // текущая дата/время
+                java.time.LocalDateTime.now(),
                 minutes,
                 character,
                 notes
         );
 
-        sessionRepo.save(session);
+        session = sessionRepo.save(session); // save возвращает PlaySession
         System.out.println("Session saved: " + session.getId());
     }
+
 
 
     private void showTopGames() {
@@ -147,8 +180,10 @@ public class CommandHandler {
                 g.getReleaseYear()
         ));
     }
-    private String safe(String s) { return (s == null || s.isBlank()) ? "-" : s; }
 
+    private String safe(String s) {
+        return (s == null || s.isBlank()) ? "-" : s;
+    }
 
 
     private void listSessionsByGame() {
@@ -178,11 +213,11 @@ public class CommandHandler {
                 truncate(s.getNotes(), 30)
         ));
     }
+
     private String truncate(String s, int max) {
         s = safe(s);
         return s.length() <= max ? s : s.substring(0, max - 1) + "…";
     }
-
 
     private void exportCsv() {
         try {
