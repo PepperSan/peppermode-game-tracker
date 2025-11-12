@@ -49,3 +49,16 @@ mvn clean package
 
 # 4. Run the CLI app
 java -cp target/peppermode-game-tracker-1.0-SNAPSHOT.jar com.peppermode.tracker.cli.Main
+
+## REST API
+
+Base URL: `http://localhost:8080/api`
+
+### Games
+- `GET /games` — список игр
+- `GET /games/{id}` — игра по id
+- `POST /games` — создать игру  
+  Body:
+  ```json
+  {"title":"Ghost of Tsushima","genre":"Action","platform":"PS5","releaseYear":2020}
+
