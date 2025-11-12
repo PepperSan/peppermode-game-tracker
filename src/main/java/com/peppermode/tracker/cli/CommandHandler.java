@@ -4,7 +4,7 @@ import com.peppermode.tracker.domain.Game;
 import com.peppermode.tracker.domain.PlaySession;
 import com.peppermode.tracker.repo.GameRepository;
 import com.peppermode.tracker.repo.SessionRepository;
-import com.peppermode.tracker.service.StatsService;
+import com.peppermode.tracker.StatsService;
 
 import java.util.*;
 import java.util.stream.Collectors;

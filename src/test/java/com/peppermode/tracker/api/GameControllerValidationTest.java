@@ -1,4 +1,4 @@
-package com.peppermode.tracker.service.api;
+package com.peppermode.tracker.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,7 +3,7 @@ package com.peppermode.tracker.cli;
 import com.peppermode.tracker.repo.*;
 import com.peppermode.tracker.repo.file.FileGameRepository;
 import com.peppermode.tracker.repo.file.FileSessionRepository;
-import com.peppermode.tracker.service.StatsService;
+import com.peppermode.tracker.StatsService;
 
 import java.util.Scanner;
 

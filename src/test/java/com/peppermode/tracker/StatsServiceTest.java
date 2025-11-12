@@ -1,4 +1,4 @@
-package com.peppermode.tracker.service;
+package com.peppermode.tracker;
 
 import com.peppermode.tracker.domain.Game;
 import com.peppermode.tracker.domain.PlaySession;
