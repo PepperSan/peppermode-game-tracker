@@ -62,3 +62,34 @@ Base URL: `http://localhost:8080/api`
   ```json
   {"title":"Ghost of Tsushima","genre":"Action","platform":"PS5","releaseYear":2020}
 
+
+🗺️ Roadmap
+✅ Completed
+
+✔ CLI MVP (добавление игр, сессий, статистика)
+
+✔ JSON persistence (games.json, sessions.json)
+
+✔ File & InMemory репозитории
+
+✔ Modular architecture (domain → repo → service → cli/api)
+
+✔ Spring Boot integration
+
+✔ REST API:
+
+/api/games
+
+/api/sessions
+
+/api/ping (health-check)
+
+✔ CORS config
+
+✔ DTO + validation
+
+✔ REST tests with MockMvc
+
+✔ Basic error handling (частично)
+
+✔ README documentation
