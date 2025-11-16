@@ -32,9 +32,11 @@ public class GameController {
     @GetMapping
     public List<GameDto> all(
             @RequestParam(required = false) String genre,
-            @RequestParam(required = false) String platform
+            @RequestParam(required = false) String platform,
+            @RequestParam(required = false) Integer yearFrom,
+            @RequestParam(required = false) Integer yearTo
     ) {
-        var filtered = gameService.findGames(genre, platform);
+        var filtered = gameService.findGames(genre, platform, yearFrom, yearTo);
         return filtered.stream()
                 .map(GameDto::from)
                 .toList();

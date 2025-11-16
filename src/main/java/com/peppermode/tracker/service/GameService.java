@@ -19,7 +19,8 @@ public class GameService {
         return gameRepository.findAll();
     }
 
-    public List<Game> findGames(String genre, String platform) {
+    public List<Game> findGames(String genre, String platform,
+                                Integer yearFrom, Integer yearTo) {
         var games = gameRepository.findAll();
 
         return games.stream()
@@ -27,7 +28,10 @@ public class GameService {
                         || (g.getGenre() != null && g.getGenre().equalsIgnoreCase(genre)))
                 .filter(g -> platform == null || platform.isBlank()
                         || (g.getPlatform() != null && g.getPlatform().equalsIgnoreCase(platform)))
+                .filter(g -> yearFrom == null || g.getReleaseYear() >= yearFrom)
+                .filter(g -> yearTo == null || g.getReleaseYear() <= yearTo)
                 .toList();
     }
+
 }
 
