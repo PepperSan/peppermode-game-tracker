@@ -7,7 +7,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @RestController
@@ -25,17 +27,22 @@ public class GameController {
         return games.findAll().stream().map(GameDto::from).toList();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<GameDto> byId(@PathVariable String id) {
-        return games.findById(id)
-                .map(g -> ResponseEntity.ok(GameDto.from(g)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
+    
     @PostMapping
     public ResponseEntity<GameDto> create(@RequestBody @Valid GameDto dto) {
         String id = UUID.randomUUID().toString();
         Game saved = games.save(dto.toDomainNew(id));
         return ResponseEntity.ok(GameDto.from(saved));
     }
+    @GetMapping("/{id}")
+    public GameDto getById(@PathVariable String id) {
+        var game = games.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Game not found"));
+
+        return GameDto.from(game);
+    }
+
+
+
+
 }
