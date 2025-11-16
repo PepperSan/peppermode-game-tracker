@@ -8,7 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+
+
 import java.util.List;
+import com.peppermode.tracker.service.GameService;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -17,17 +20,28 @@ import java.util.UUID;
 public class GameController {
 
     private final GameRepository games;
+    private final GameService gameService;
 
-    public GameController(GameRepository games) {
+
+    public GameController(GameRepository games, GameService gameService) {
         this.games = games;
+        this.gameService = gameService;
     }
+
 
     @GetMapping
-    public List<GameDto> all() {
-        return games.findAll().stream().map(GameDto::from).toList();
+    public List<GameDto> all(
+            @RequestParam(required = false) String genre,
+            @RequestParam(required = false) String platform
+    ) {
+        var filtered = gameService.findGames(genre, platform);
+        return filtered.stream()
+                .map(GameDto::from)
+                .toList();
     }
 
-    
+
+
     @PostMapping
     public ResponseEntity<GameDto> create(@RequestBody @Valid GameDto dto) {
         String id = UUID.randomUUID().toString();
