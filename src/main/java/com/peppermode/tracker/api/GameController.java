@@ -34,13 +34,16 @@ public class GameController {
             @RequestParam(required = false) String genre,
             @RequestParam(required = false) String platform,
             @RequestParam(required = false) Integer yearFrom,
-            @RequestParam(required = false) Integer yearTo
+            @RequestParam(required = false) Integer yearTo,
+            @RequestParam(required = false) String sort
     ) {
-        var filtered = gameService.findGames(genre, platform, yearFrom, yearTo);
+        var filtered = gameService.findGames(genre, platform, yearFrom, yearTo, sort);
+
         return filtered.stream()
                 .map(GameDto::from)
                 .toList();
     }
+
 
 
 
