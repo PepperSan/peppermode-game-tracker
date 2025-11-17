@@ -2,6 +2,7 @@ package com.peppermode.tracker.api;
 
 import com.peppermode.tracker.api.dto.AverageSessionDto;
 import com.peppermode.tracker.api.dto.GameStatsDto;
+import com.peppermode.tracker.api.dto.GenreStatsDto;
 import com.peppermode.tracker.domain.Game;
 import com.peppermode.tracker.repo.GameRepository;
 import com.peppermode.tracker.repo.SessionRepository;
@@ -63,6 +64,14 @@ public class StatsController {
         double avg = statsService.averageSessionLengthMinutes();
         return new AverageSessionDto(avg);
     }
+
+    @GetMapping("/genres")
+    public List<GenreStatsDto> countByGenre() {
+        return statsService.gamesCountByGenre().entrySet().stream()
+                .map(e -> new GenreStatsDto(e.getKey(), e.getValue()))
+                .toList();
+    }
+
 
 }
 
