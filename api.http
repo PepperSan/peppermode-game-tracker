@@ -1,0 +1,73 @@
+### ============================
+###      GAME API
+### ============================
+
+### 1. Создать игру
+POST http://localhost:8080/api/games
+Content-Type: application/json
+
+{
+  "title": "Test Game",
+  "genre": "RPG",
+  "platform": "PC",
+  "releaseYear": 2025
+}
+
+### 2. Получить все игры
+GET http://localhost:8080/api/games
+
+### 3. Получить игру по ID
+GET http://localhost:8080/api/games/{{gameId}}
+
+### 4. Удалить игру по ID
+DELETE http://localhost:8080/api/games/{{gameId}}
+
+### 5. Удалить все игры
+DELETE http://localhost:8080/api/games
+
+
+### ============================
+###   SESSION API
+### ============================
+
+### 6. Создать игровую сессию
+POST http://localhost:8080/api/sessions
+Content-Type: application/json
+
+{
+  "gameId": "{{gameId}}",
+  "minutesPlayed": 45
+}
+
+### 7. Получить все сессии
+GET http://localhost:8080/api/sessions
+
+### 8. Получить сессии по ID игры
+GET http://localhost:8080/api/sessions/game/{{gameId}}
+
+### 9. Получить сессию по ID
+GET http://localhost:8080/api/sessions/{{sessionId}}
+
+### 10. Удалить сессию по ID
+DELETE http://localhost:8080/api/sessions/{{sessionId}}
+
+### 11. Удалить все сессии
+DELETE http://localhost:8080/api/sessions
+
+
+### ============================
+###       STATS API
+### ============================
+
+### 12. Общая статистика по играм (время)
+GET http://localhost:8080/api/stats/games
+
+### 13. Топ игр по времени
+GET http://localhost:8080/api/stats/games/top?limit=3
+
+### 14. Средняя длина игровой сессии
+GET http://localhost:8080/api/stats/sessions/average
+
+### 15. Количество игр по жанрам
+GET http://localhost:8080/api/stats/genres
+

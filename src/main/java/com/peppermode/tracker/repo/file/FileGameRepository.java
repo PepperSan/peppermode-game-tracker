@@ -17,6 +17,7 @@ public class FileGameRepository implements GameRepository {
     private final Path file;
     private final Gson gson = JsonUtil.gson();
     private final Map<String, Game> byId = new ConcurrentHashMap<>();
+    private final Path path = Path.of("data", "games.json");
 
     private static final Type LIST_TYPE = new TypeToken<List<Game>>(){}.getType();
 
@@ -65,32 +66,39 @@ public class FileGameRepository implements GameRepository {
     // --- interface impl ---
 
     @Override
-    public Optional<Game> findById(String id) {
-        return Optional.ofNullable(byId.get(id));
-    }
-
-    @Override
     public List<Game> findAll() {
-        return new ArrayList<>(byId.values());
+        return JsonUtil.readList(path, Game[].class);
     }
 
     @Override
+    public Optional<Game> findById(String id) {
+        return findAll().stream()
+                .filter(g -> g.getId().equals(id))
+                .findFirst();
+    }
+
     public Game save(Game game) {
-        Objects.requireNonNull(game, "game");
-        Objects.requireNonNull(game.getId(), "game.id");
-        byId.put(game.getId(), game);
-        persist();
-        return game; // <— ВАЖНО: вернуть сохранённый объект
+        List<Game> list = JsonUtil.readList(file, Game[].class);
+
+        list.removeIf(g -> g.getId().equals(game.getId()));
+        list.add(game);
+
+        JsonUtil.writeList(file, list);
+        return game;
     }
 
-    // если в интерфейсе есть delete/update — добавь по аналогии:
+    @Override
     public void deleteById(String id) {
-        if (byId.remove(id) != null) persist();
+        var games = findAll();
+        games.removeIf(g -> g.getId().equals(id));
+        JsonUtil.writeList(path, games);
     }
 
+    @Override
     public void deleteAll() {
-        byId.clear();
-        persist();
+        JsonUtil.writeList(file, new ArrayList<>());
     }
+
+
 }
 

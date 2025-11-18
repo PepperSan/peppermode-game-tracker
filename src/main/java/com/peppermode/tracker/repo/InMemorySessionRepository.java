@@ -29,4 +29,14 @@ public class InMemorySessionRepository implements SessionRepository {
     public List<PlaySession> findAll() {
         return new ArrayList<>(store.values());
     }
+    @Override
+    public void deleteById(String id) {
+        store.remove(id);
+    }
+
+    @Override
+    public void deleteAll() {
+        store.clear();
+    }
+
 }

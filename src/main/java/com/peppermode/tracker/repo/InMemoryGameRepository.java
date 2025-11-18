@@ -21,5 +21,15 @@ public class InMemoryGameRepository implements GameRepository {
     public List<Game> findAll() {
         return new ArrayList<>(store.values());
     }
+    @Override
+    public void deleteById(String id) {
+        store.remove(id);
+    }
+
+    @Override
+    public void deleteAll() {
+        store.clear();
+    }
+
 }
 

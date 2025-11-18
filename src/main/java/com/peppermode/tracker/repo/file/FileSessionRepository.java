@@ -18,6 +18,7 @@ public class FileSessionRepository implements SessionRepository {
     private final Path file;
     private final Gson gson = JsonUtil.gson();
     private final Map<String, PlaySession> byId = new ConcurrentHashMap<>();
+    private final Path path = Path.of("data", "sessions.json");
 
     private static final Type LIST_TYPE = new TypeToken<List<PlaySession>>(){}.getType();
 
@@ -68,39 +69,56 @@ public class FileSessionRepository implements SessionRepository {
 
 
     @Override
-    public Optional<PlaySession> findById(String id) {
-        return Optional.ofNullable(byId.get(id));
+    public List<PlaySession> findAll() {
+        return JsonUtil.readList(path, PlaySession[].class);
     }
 
     @Override
-    public List<PlaySession> findAll() {
-        return new ArrayList<>(byId.values());
+    public Optional<PlaySession> findById(String id) {
+        return findAll().stream()
+                .filter(s -> s.getId().equals(id))
+                .findFirst();
     }
+
 
     @Override
     public List<PlaySession> findByGameId(String gameId) {
-        return byId.values().stream()
+        return JsonUtil.readList(path, PlaySession[].class)
+                .stream()
                 .filter(s -> Objects.equals(s.getGameId(), gameId))
-                .collect(Collectors.toList());
+                .toList();
     }
+
+
 
     @Override
     public PlaySession save(PlaySession session) {
         Objects.requireNonNull(session, "session");
         Objects.requireNonNull(session.getId(), "session.id");
-        byId.put(session.getId(), session);
-        persist();
-        return session; // <— вернуть
+
+        List<PlaySession> list = JsonUtil.readList(path, PlaySession[].class);
+
+        list.removeIf(s -> s.getId().equals(session.getId()));
+        list.add(session);
+
+        JsonUtil.writeList(path, list);
+        return session;
     }
 
 
-    // опционально, если пригодится
+
+
+    @Override
     public void deleteById(String id) {
-        if (byId.remove(id) != null) persist();
+        List<PlaySession> sessions = JsonUtil.readList(path, PlaySession[].class);
+        sessions.removeIf(s -> s.getId().equals(id));
+        JsonUtil.writeList(path, sessions);
     }
 
+
+    @Override
     public void deleteAll() {
-        byId.clear();
-        persist();
+        JsonUtil.writeList(path, new ArrayList<>());
     }
+
 }

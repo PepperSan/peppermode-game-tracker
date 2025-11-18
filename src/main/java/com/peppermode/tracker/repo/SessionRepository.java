@@ -9,5 +9,7 @@ public interface SessionRepository {
     Optional<PlaySession> findById(String id);
     List<PlaySession> findByGameId(String gameId);
     List<PlaySession> findAll();
+    void deleteById(String id);
+    void deleteAll();
 }
 
