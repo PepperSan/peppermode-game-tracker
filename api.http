@@ -1,3 +1,10 @@
+
+@host = http://localhost:8080
+@gameId = 3d76b9a6-180e-4437-bbb6-bbea890103e7
+@sessionId = c6172c20-7eae-4b5d-8b84-c85eb256b40f
+
+
+
 ### ============================
 ###      GAME API
 ### ============================
@@ -7,11 +14,24 @@ POST http://localhost:8080/api/games
 Content-Type: application/json
 
 {
-  "title": "Test Game",
-  "genre": "RPG",
-  "platform": "PC",
-  "releaseYear": 2025
+  "title": "Кинг Конг",
+  "genre": "Шутер",
+  "platform": "PS",
+  "releaseYear": 2020
 }
+
+### 3. Обновить игру по ID
+PUT {{host}}/api/games/{{gameId}}
+Content-Type: application/json
+
+{
+  "title": "Кинг Конг (обновлённая)",
+  "genre": "Шутер",
+  "platform": "PS5",
+  "releaseYear": 2021
+}
+
+> {% client.global.set("gameId", response.body.id) %}
 
 ### 2. Получить все игры
 GET http://localhost:8080/api/games
@@ -39,8 +59,10 @@ Content-Type: application/json
   "minutesPlayed": 45
 }
 
+
 ### 7. Получить все сессии
 GET http://localhost:8080/api/sessions
+
 
 ### 8. Получить сессии по ID игры
 GET http://localhost:8080/api/sessions/game/{{gameId}}
@@ -70,4 +92,8 @@ GET http://localhost:8080/api/stats/sessions/average
 
 ### 15. Количество игр по жанрам
 GET http://localhost:8080/api/stats/genres
+
+
+
+
 

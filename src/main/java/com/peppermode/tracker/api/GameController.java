@@ -27,8 +27,6 @@ public class GameController {
         this.games = games;
         this.gameService = gameService;
     }
-
-
     @GetMapping
     public List<GameDto> all(
             @RequestParam(required = false) String genre,
@@ -43,10 +41,6 @@ public class GameController {
                 .map(GameDto::from)
                 .toList();
     }
-
-
-
-
     @PostMapping
     public ResponseEntity<GameDto> create(@RequestBody @Valid GameDto dto) {
         String id = UUID.randomUUID().toString();
@@ -61,7 +55,24 @@ public class GameController {
         return GameDto.from(game);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable String id) {
+        games.deleteById(id);
+        return ResponseEntity.noContent().build(); // 204 No Content
+    }
 
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAll() {
+        games.deleteAll();
+        return ResponseEntity.noContent().build(); // 204 No Content
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<GameDto> update(@PathVariable String id,
+                                          @RequestBody @Valid GameDto dto) {
+        GameDto updated = gameService.update(id, dto);
+        return ResponseEntity.ok(updated);
+    }
 
 
 }

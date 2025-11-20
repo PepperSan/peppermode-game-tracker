@@ -1,11 +1,13 @@
 package com.peppermode.tracker.service;
 
+import com.peppermode.tracker.api.dto.GameDto;
 import com.peppermode.tracker.domain.Game;
 import com.peppermode.tracker.repo.GameRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class GameService {
@@ -62,4 +64,17 @@ public class GameService {
 
         return stream.toList();
     }
+    public GameDto update(String id, GameDto dto) {
+        var existing = gameRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Game not found: " + id));
+
+        Game updated = dto.toDomainWithId(existing.getId());
+
+        Game saved = gameRepository.save(updated);
+
+        return GameDto.from(saved);
+
+    }
+
+
 }
