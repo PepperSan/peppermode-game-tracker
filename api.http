@@ -14,10 +14,10 @@ POST http://localhost:8080/api/games
 Content-Type: application/json
 
 {
-  "title": "Кинг Конг",
-  "genre": "Шутер",
+  "title": "Рыбалка",
+  "genre": "Лонг гейм",
   "platform": "PS",
-  "releaseYear": 2020
+  "releaseYear": 2009
 }
 
 ### 3. Обновить игру по ID
