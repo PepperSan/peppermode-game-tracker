@@ -84,12 +84,4 @@ Base URL: `http://localhost:8080/api`
 
 /api/ping (health-check)
 
-✔ CORS config
-
-✔ DTO + validation
-
-✔ REST tests with MockMvc
-
-✔ Basic error handling (частично)
-
-✔ README documentation
+## ⚙️ How to Run Locally
