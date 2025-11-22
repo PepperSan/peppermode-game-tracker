@@ -7,6 +7,9 @@ import com.peppermode.tracker.domain.Game;
 import com.peppermode.tracker.repo.GameRepository;
 import com.peppermode.tracker.repo.SessionRepository;
 import com.peppermode.tracker.StatsService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +21,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Tag(name = "Stats API", description = "Статистика по играм и сессиям")
 @RestController
 @RequestMapping("/api/stats")
 public class StatsController {
@@ -32,6 +36,11 @@ public class StatsController {
         this.statsService = new StatsService(games, sessions); // именно (games, sessions)
     }
 
+    @Operation(
+            summary = "Статистика по играм",
+            description = "Возвращает суммарное время по каждой игре."
+    )
+    @ApiResponse(responseCode = "200", description = "Статистика по играм получена")
     @GetMapping("/games")
     public List<GameStatsDto> gameStats() {
 
@@ -49,7 +58,11 @@ public class StatsController {
                 .sorted(Comparator.comparingInt(GameStatsDto::getTotalMinutes).reversed())
                 .toList();
     }
-
+    @Operation(
+            summary = "Топ игр по времени",
+            description = "Возвращает игры с максимальным суммарным временем прохождения."
+    )
+    @ApiResponse(responseCode = "200", description = "Статистика по топу игр получена")
     @GetMapping("/games/top")
     public List<GameStatsDto> topGames(
             @RequestParam(defaultValue = "3") int limit
@@ -59,12 +72,22 @@ public class StatsController {
                 .toList();
     }
 
+    @Operation(
+            summary = "Средняя длина сессии",
+            description = "Возвращает среднюю длительность игровой сессии в минутах."
+    )
+    @ApiResponse(responseCode = "200", description = "Статистика по средней сессии получена")
     @GetMapping("/sessions/average")
     public AverageSessionDto averageSession() {
         double avg = statsService.averageSessionLengthMinutes();
         return new AverageSessionDto(avg);
     }
 
+    @Operation(
+            summary = "Количество игр по жанрам",
+            description = "Возвращает статистику распределения игр по жанрам."
+    )
+    @ApiResponse(responseCode = "200", description = "Статистика по жанрам получена")
     @GetMapping("/genres")
     public List<GenreStatsDto> countByGenre() {
         return statsService.gamesCountByGenre().entrySet().stream()
