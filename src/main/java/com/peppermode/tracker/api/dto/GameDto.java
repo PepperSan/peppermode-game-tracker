@@ -19,5 +19,8 @@ public record GameDto(
     public Game toDomainNew(String id) {
         return new Game(id, title, genre, platform, releaseYear);
     }
+    public Game toDomain() {
+        return new Game(id, title, genre, platform, releaseYear);
+    }
 }
 
