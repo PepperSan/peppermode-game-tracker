@@ -49,9 +49,19 @@ public class StatsService {
                 .orElse(0.0);
     }
 
-    public Map<String, Long> gamesCountByGenre() {
+    public Map<String, Long> gamesCountByGenre(String platform) {
         return games.findAll().stream()
-                .collect(Collectors.groupingBy(Game::getGenre, Collectors.counting()));
+                .filter(game -> platform == null
+                        || platform.isBlank()
+                        || game.getPlatform().equalsIgnoreCase(platform))
+                .collect(Collectors.groupingBy(
+                        Game::getGenre,
+                        Collectors.counting()
+                ));
+    }
+
+    public Map<String, Long> gamesCountByGenre() {
+        return gamesCountByGenre(null);
     }
 }
 

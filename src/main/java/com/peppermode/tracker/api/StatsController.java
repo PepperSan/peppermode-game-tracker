@@ -8,6 +8,7 @@ import com.peppermode.tracker.repo.GameRepository;
 import com.peppermode.tracker.repo.SessionRepository;
 import com.peppermode.tracker.StatsService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -85,15 +86,19 @@ public class StatsController {
 
     @Operation(
             summary = "Количество игр по жанрам",
-            description = "Возвращает статистику распределения игр по жанрам."
+            description = "Возвращает статистику игр по жанрам. Можно отфильтровать по платформе."
     )
     @ApiResponse(responseCode = "200", description = "Статистика по жанрам получена")
-    @GetMapping("/genres")
-    public List<GenreStatsDto> countByGenre() {
-        return statsService.gamesCountByGenre().entrySet().stream()
+    @GetMapping("/genres-count")
+    public List<GenreStatsDto> countByGenre(
+            @Parameter(description = "Фильтр по платформе (например, PS5, PC)", example = "PS5")
+            @RequestParam(required = false) String platform
+    ) {
+        return statsService.gamesCountByGenre(platform).entrySet().stream()
                 .map(e -> new GenreStatsDto(e.getKey(), e.getValue()))
                 .toList();
     }
+
 
 
 }
