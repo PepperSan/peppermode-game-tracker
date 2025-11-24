@@ -78,13 +78,14 @@ public class FileGameRepository implements GameRepository {
     }
 
     public Game save(Game game) {
-        List<Game> list = JsonUtil.readList(file, Game[].class);
+        List<Game> games = JsonUtil.readList(file, Game[].class);
 
-        list.removeIf(g -> g.getId().equals(game.getId()));
-        list.add(game);
+        games.removeIf(g -> g.getId().equals(game.getId()));
+        games.add(game);
 
-        JsonUtil.writeList(file, list);
+        JsonUtil.writeList(file, games);
         return game;
+
     }
 
     @Override

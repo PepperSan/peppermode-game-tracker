@@ -95,7 +95,9 @@ class StatsControllerTest {
 
     @Test
     void shouldReturnGenresStats() throws Exception {
-        mvc.perform(get("/api/stats/genres"))
+        mvc.perform(get("/api/stats/genres-count"))
                 .andExpect(status().isOk());
+
     }
+
 }

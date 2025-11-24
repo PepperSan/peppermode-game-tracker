@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
+
 
 public class FileSessionRepository implements SessionRepository {
 
