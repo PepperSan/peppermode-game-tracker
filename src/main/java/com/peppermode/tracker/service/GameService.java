@@ -18,10 +18,6 @@ public class GameService {
         this.gameRepository = gameRepository;
     }
 
-    public List<Game> getAllGames() {
-        return gameRepository.findAll(); // БЫЛО findALL() — это опечатка
-    }
-
     public List<Game> findGames(String genre,
                                 String platform,
                                 Integer yearFrom,
