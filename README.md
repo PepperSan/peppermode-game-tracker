@@ -420,8 +420,9 @@ mvn test
 - Docker Compose для БД
 
 
-## 🗺️ Roadmap
+## 🗺 Roadmap
 
+### ✔ Completed
 - [x] CLI MVP (игры, сессии, статистика)
 - [x] JSON persistence (games.json, sessions.json)
 - [x] REST API
@@ -431,6 +432,8 @@ mvn test
 - [x] Basic error handling
 - [x] README документация
 - [x] Swagger UI
+
+### ⏳ Planned (Future Enhancements)
 - [ ] PostgreSQL storage
 - [ ] Desktop UI (JavaFX)
 - [ ] JWT Auth (опционально)
