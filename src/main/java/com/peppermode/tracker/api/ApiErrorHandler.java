@@ -4,6 +4,7 @@ import com.peppermode.tracker.api.dto.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,15 +16,24 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class ApiErrorHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> validation(MethodArgumentNotValidException ex) {
-        var errors = ex.getBindingResult().getFieldErrors().stream()
-                .collect(java.util.stream.Collectors.toMap(
-                        e -> e.getField(),
-                        e -> e.getDefaultMessage(),
-                        (a,b) -> a
-                ));
-        return ResponseEntity.badRequest().body(Map.of("error", "validation", "details", errors));
+    public ResponseEntity<ApiErrorResponse> validation(MethodArgumentNotValidException ex,
+                                                       HttpServletRequest request) {
+
+        var firstErrorMessage = ex.getBindingResult().getFieldErrors().stream()
+                .findFirst()
+                .map(FieldError::getDefaultMessage)
+                .orElse("Validation error");
+
+        var body = new ApiErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Validation error",
+                firstErrorMessage,
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.badRequest().body(body);
     }
+
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ApiErrorResponse> handleNotFound(NoSuchElementException ex,
